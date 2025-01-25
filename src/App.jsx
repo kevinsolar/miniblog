@@ -17,6 +17,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
+import CreatePost from "./pages/CreatePost";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
 
@@ -47,6 +49,8 @@ function App() {
                      <Route path="/sobre" element={<Sobre />} />
                      <Route path="/login" element={<Login />} />
                      <Route path="/cadastro" element={<Cadastro />} />
+                     <Route path="/posts/create" element={<CreatePost />} />
+                     <Route path="/dashboard" element={<Dashboard />} />
                   </Routes>
                </div>
                <Footer />
