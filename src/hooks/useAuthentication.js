@@ -76,13 +76,37 @@ export const useAuthentication = () => {
 		}
 	};
 
-	// fazer Logout / sair do usuario atual.
+	/*
+	 * Logout / sair do usuario atual.
+	 */
 	const logout = () => {
 		// cuidamos primeiro do nosso memory leak
 		checkIfIsCancelled();
 
 		//chamamos a função do firebase para fazer o signOut e passamos como parametro o usuario autenticado.
 		signOut(auth);
+	};
+
+	const login = async (data) => {
+		checkIfIsCancelled();
+
+		setLoading(true);
+		try {
+			await signInWithEmailAndPassword(auth, data.email, data.password);
+		} catch (error) {
+			let systemErrorMessage;
+
+			if (error.message.includes("user-not-found")) {
+				systemErrorMessage = "Usuário não encontrado.";
+			} else if (error.message.includes("wrong-password")) {
+				systemErrorMessage = "Senha incorreta.";
+			} else {
+				systemErrorMessage = "Ocorreu um erro.";
+			}
+
+			setError(systemErrorMessage);
+			setLoading(false);
+		}
 	};
 
 	//Utilizamos esse useEffect com o plano de que ele execute uma vez só, para colocar o cancelado como true, assim que sairmos da página.
@@ -96,6 +120,7 @@ export const useAuthentication = () => {
 		createUser,
 		error,
 		loading,
-      logout,
+		logout,
+      login,
 	};
 };
