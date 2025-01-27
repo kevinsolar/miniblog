@@ -71,9 +71,18 @@ export const useAuthentication = () => {
 
 			//Ao finalizar a função, colocamos o setLoading para falso, pois já terminou de carregar/realizar a função.
 			setLoading(false);
-         // Caso tenha erro e de acordo com o erro, passaremos a mensagem referente ao erro.
+			// Caso tenha erro e de acordo com o erro, passaremos a mensagem referente ao erro.
 			setError(systemErrorMessage);
 		}
+	};
+
+	// fazer Logout / sair do usuario atual.
+	const logout = () => {
+		// cuidamos primeiro do nosso memory leak
+		checkIfIsCancelled();
+
+		//chamamos a função do firebase para fazer o signOut e passamos como parametro o usuario autenticado.
+		signOut(auth);
 	};
 
 	//Utilizamos esse useEffect com o plano de que ele execute uma vez só, para colocar o cancelado como true, assim que sairmos da página.
@@ -87,5 +96,6 @@ export const useAuthentication = () => {
 		createUser,
 		error,
 		loading,
+      logout,
 	};
 };

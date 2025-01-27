@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
-import { onAuthStateChanged } from "firebase/auth";//Essa importacao que mapeia se a autenticacao do usario ocorreu tudo certo.
+import { onAuthStateChanged } from "firebase/auth"; //Essa importacao que mapeia se a autenticacao do usario ocorreu tudo certo.
 
 //HOOKS
 import { useState, useEffect } from "react";
@@ -21,43 +21,58 @@ import CreatePost from "./pages/CreatePost";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
+	const [user, setUser] = useState(undefined); //Comecando sem usuario com undefined
+	const { auth } = useAuthentication(); //chamamos nosso auth do useAuth... para nao precisar fazer novamente aqui.
 
-   const [user, setUser] = useState(undefined)//Comecando sem usuario com undefined
-   const { auth } = useAuthentication();//chamamos nosso auth do useAuth... para nao precisar fazer novamente aqui.
+	const loadingUser = user === undefined;
+	// Atribuo ao estado de loading do usuario a comparacao de user com undefined, entao se for undefined ele esta carregando de alguma maneira. Evita de mostrar algo antes que o usuario esteja realmente logado.
 
-   const loadingUser = user === undefined
-   // Atribuo ao estado de loading do usuario a comparacao de user com undefined, entao se for undefined ele esta carregando de alguma maneira. Evita de mostrar algo antes que o usuario esteja realmente logado.
+	useEffect(() => {
+		onAuthStateChanged(auth, (user) => {
+			setUser(user);
+		});
+	}, [auth]);
 
-   useEffect(() => {
-      onAuthStateChanged(auth, (user) => {
-         setUser(user)
-      })
-   }, [auth])
+	if (loadingUser) {
+		return <p>Carregando...</p>;
+	}
 
-   if (loadingUser) {
-      return <p>Carregando...</p>;
-   }
+	return (
+		<div className="App">
+			<AuthProvider value={{ user }}>
+				<BrowserRouter>
+					<Navbar />
+					<div className="container">
+						<Routes>
+							<Route path="/" element={<Home />} />
+							<Route path="/sobre" element={<Sobre />} />
+							{/* Para impossibilitar as pessoas de entrar na página de login, já estando logadas,
+                     vamos fazer uma verificação, caso não tenha o usuário, então abrirá a página de Login,
+                     mas caso o usuário já esteja autenticado pela aplicação, então vamos fazer um
+                     redirect para a Home, utilizando o Navigate com to="/" */}
+							<Route
+								path="/login"
+								element={!user ? <Login /> : <Navigate to="/" />}
+							/>
+							{/* Mesma coisa de cima com o cadastro */}
+							<Route
+								path="/cadastro"
+								element={!user ? <Cadastro /> : <Navigate to="/" />}
+							/>
 
-   return (
-      <div className="App">
-         <AuthProvider value={{ user }}>
-            <BrowserRouter>
-               <Navbar />
-               <div className="container">
-                  <Routes>
-                     <Route path="/" element={<Home />} />
-                     <Route path="/sobre" element={<Sobre />} />
-                     <Route path="/login" element={<Login />} />
-                     <Route path="/cadastro" element={<Cadastro />} />
-                     <Route path="/posts/create" element={<CreatePost />} />
-                     <Route path="/dashboard" element={<Dashboard />} />
-                  </Routes>
-               </div>
-               <Footer />
-            </BrowserRouter>
-         </AuthProvider>
-      </div>
-   );
+							{/*
+                     Aqui vamos fazer ao contrário, pois só será possivel fazer o post e ver a Dashboard,
+                     quem já estiver logado.
+                     */}
+							<Route path="/posts/create" element={user ? <CreatePost /> : <Navigate to="/login" />} />
+							<Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+						</Routes>
+					</div>
+					<Footer />
+				</BrowserRouter>
+			</AuthProvider>
+		</div>
+	);
 }
 
 export default App;

@@ -25,6 +25,21 @@
    padding: .4em .6em;
 }
 
+.link_list li button {
+   border: 0;
+   border-radius: 0;
+   padding: 0;
+   background-color: transparent;
+   color: var(--color-black);
+   font-size: 0.895rem;
+   transition: all 0.45s ease-in-out;
+}
+
+.link_list li button:hover {
+   font-size: 1rem;
+   text-decoration: underline;
+}
+
 .active {
    background-color: var(--color-black);
    color: var(--color-white);
