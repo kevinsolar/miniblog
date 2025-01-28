@@ -1,4 +1,4 @@
-import { app, db } from "../firebase/config";
+import { db } from "../firebase/config";
 
 //Importando funções que iremos precisar.
 import {
@@ -20,7 +20,7 @@ export const useAuthentication = () => {
 	//deal with memory leak -> memory leak é quando temos o problema de mudar de página ou algo do tipo e ainda mantermos as informações que tinhamos preenchido ou enviado em algum momento anterior/ pagina anterior, mas que não era pra acontecer.
 	const [cancelled, setCancelled] = useState(false);
 
-	const auth = getAuth(app); // Isso não significa que o usuario está autenticado, mas que posso utilizar ele para realizar funções de autenticação a partir dele.
+	const auth = getAuth(); // Isso não significa que o usuario está autenticado, mas que posso utilizar ele para realizar funções de autenticação a partir dele.
 
 	function checkIfIsCancelled() {
 		if (cancelled) {
