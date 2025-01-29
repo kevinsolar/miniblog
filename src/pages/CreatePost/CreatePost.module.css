@@ -1,0 +1,15 @@
+.create_post {
+   max-width: 40%;
+}
+
+@media (max-width: 1600px ) {
+   .create_post {
+      max-width: 60%;
+   }   
+}
+
+@media (max-width: 1100px ) {
+   .create_post {
+      max-width: 70%;
+   }   
+}
