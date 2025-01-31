@@ -3,6 +3,7 @@ import styles from "./CreatePost.module.css";
 import { useState } from "react";
 import { useAuthValue } from '../../context/AuthContext'
 import { useInsertDocument } from "../../hooks/useInsertDocument";
+import { useNavigate } from "react-router";
 
 const CreatePost = () => {
 	const [title, setTitle] = useState("");
@@ -13,28 +14,43 @@ const CreatePost = () => {
 
    const { user } = useAuthValue()
 
-	const { insertDocument, response } = useInsertDocument;
+	const { insertDocument, response } = useInsertDocument("posts");
+
+   const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setFormError("");
 
 		//validate image URL
+      try {
+         new URL(img)
+      } catch (error) {
+         setFormError("A imagem precisa ser uma URL")
+      }
 
 		//criar o array de tags
+      const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
 
 		//checar todos os valores
+      if(!title || !img || !body || !tags) {
+         setFormError("Preencha todos os campos, por favor.")
+      }
+
+      if (formError) return;
 
 		insertDocument({
 			title,
-			image,
+			img,
 			body,
-			tags,
+			tagsArray,
          uid: user.uid,
          createdBy: user.displayName,
 		});
 
       //redirect home
+      navigate("/");
+
 	};
 
 	return (
@@ -89,7 +105,6 @@ const CreatePost = () => {
 					/>
 				</label>
 
-				<button className="btn">Postar</button>
 				{!response.loading && <button className="btn">Postar</button>}
 				{response.loading && (
 					<button className="btn" disabled>
@@ -98,6 +113,7 @@ const CreatePost = () => {
 				)}
 
 				{response.error && <p className="error">{response.error}</p>}
+				{formError && <p className="error">{formError}</p>}
 			</form>
 		</section>
 	);
