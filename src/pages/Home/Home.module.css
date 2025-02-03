@@ -1,0 +1,17 @@
+.home {
+   width: 80%;
+   margin: 0 auto;
+}
+.home .title {
+   text-align: center;
+}
+.search_form {
+   display: flex;
+   gap: 1rem;
+   align-items: center;
+   justify-content: center;
+}
+
+.not_found {
+   text-align: center;
+}
