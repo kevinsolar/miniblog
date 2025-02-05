@@ -151,3 +151,11 @@ button[disabled] {
 		max-width: 100%;
 	}
 }
+
+.d-flex {
+   display: flex;
+}
+
+.gap-1 {
+   gap: 1rem;
+}
