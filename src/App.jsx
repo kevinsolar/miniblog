@@ -20,6 +20,7 @@ import Cadastro from "./pages/Cadastro";
 import CreatePost from "./pages/CreatePost";
 import Dashboard from "./pages/Dashboard";
 import Search from "./pages/Search";
+import Post from "./pages/Post";
 
 function App() {
 	const [user, setUser] = useState(undefined); //Comecando sem usuario com undefined
@@ -48,6 +49,7 @@ function App() {
 							<Route path="/" element={<Home />} />
 							<Route path="/sobre" element={<Sobre />} />
                      <Route path="/search" element={<Search />} />
+                     <Route path="/posts/:id" element={<Post />} />
 							{/* Para impossibilitar as pessoas de entrar na página de login, já estando logadas,
                      vamos fazer uma verificação, caso não tenha o usuário, então abrirá a página de Login,
                      mas caso o usuário já esteja autenticado pela aplicação, então vamos fazer um
