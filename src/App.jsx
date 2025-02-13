@@ -21,6 +21,7 @@ import CreatePost from "./pages/CreatePost";
 import Dashboard from "./pages/Dashboard";
 import Search from "./pages/Search";
 import Post from "./pages/Post";
+import EditPost from "./pages/EditPost";
 
 function App() {
 	const [user, setUser] = useState(undefined); //Comecando sem usuario com undefined
@@ -69,6 +70,7 @@ function App() {
                      quem já estiver logado.
                      */}
 							<Route path="/posts/create" element={user ? <CreatePost /> : <Navigate to="/login" />} />
+							<Route path="/posts/edit/:id" element={user ? <EditPost /> : <Navigate to="/login" />} />
 							<Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
 						</Routes>
 					</div>
